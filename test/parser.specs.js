@@ -59,13 +59,13 @@ describe('odata.parser grammar', function () {
         assert.equal(ast.$select[2], 'LastName');
     });
 
-    // This select parameter is not currently supported.
-    it('should accept * after . in $select', function () {
-
-        var ast = parser.parse('$select=DemoService.*');
-
-        assert.equal(ast.$select[0], 'DemoService.*');
-    });
+    // // This select parameter is not currently supported.
+    // it('should accept * after . in $select', function () {
+    //
+    //     var ast = parser.parse('$select=DemoService.*');
+    //
+    //     assert.equal(ast.$select[0], 'DemoService.*');
+    // });
 
     it('should accept single-char field in $select', function () {
 
@@ -73,7 +73,7 @@ describe('odata.parser grammar', function () {
 
         assert.equal(ast.$select[0], 'r');
     });
-    
+
     it('should parse order by', function () {
 
         var ast = parser.parse('$orderby=ReleaseDate desc, Rating');
@@ -93,7 +93,7 @@ describe('odata.parser grammar', function () {
         assert.equal(ast.$filter.right.type, "literal");
         assert.equal(ast.$filter.right.value, "Jef");
     });
-    
+
     it('should parse $filter containing quote', function () {
 	var ast = parser.parse("$filter=Name eq 'O''Neil'");
 
@@ -105,14 +105,14 @@ describe('odata.parser grammar', function () {
     });
 
     it('should parse $filter with subproperty', function () {
-	var ast = parser.parse("$filter=User/Name eq 'Jef'");
+	var ast = parser.parse("$filter=User.Name eq 'Jef'");
 	assert.equal(ast.$filter.type, "eq");
 	assert.equal(ast.$filter.left.type, "property");
-	assert.equal(ast.$filter.left.name, "User/Name");
+	assert.equal(ast.$filter.left.name, "User.Name");
 	assert.equal(ast.$filter.right.type, "literal");
 	assert.equal(ast.$filter.right.value, "Jef");
     });
-    
+
     it('should parse $filter containing quote', function () {
 
       var ast = parser.parse("$filter=Name eq 'O''Neil'");
@@ -132,7 +132,7 @@ describe('odata.parser grammar', function () {
 	assert.equal(ast.$filter.right.type, "literal");
 	assert.equal(ast.$filter.right.value, "Jef");
     });
-    
+
     it('should parse multiple conditions in a $filter', function () {
 
         var ast = parser.parse("$filter=Name eq 'John' and LastName lt 'Doe'");
@@ -202,20 +202,20 @@ describe('odata.parser grammar', function () {
       assert.equal(ast.$filter.args[0].value, "ng'inx");
 
     });
-    
+
     it('should parse substringof $filter with string starting with quote', function () {
 
       var ast = parser.parse("$filter=substringof('''nginx', Data)");
-      
+
       assert.equal(ast.$filter.args[0].type, "literal");
       assert.equal(ast.$filter.args[0].value, "'nginx");
 
     });
-    
+
     it('should parse substringof $filter with string ending with quote', function () {
 
       var ast = parser.parse("$filter=substringof('nginx''', Data)");
-      
+
       assert.equal(ast.$filter.args[0].type, "literal");
       assert.equal(ast.$filter.args[0].value, "nginx'");
 

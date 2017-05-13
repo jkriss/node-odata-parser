@@ -172,7 +172,7 @@ nanInfinity                 =   nan / negativeInfinity / positiveInfinity
  * OData identifiers
  */
 
-unreserved                  = a:[a-zA-Z0-9-_]+ { return a.join(''); }
+unreserved                  = a:[a-zA-Z0-9-_.]+ { return a.join(''); }
 validstring                 = a:([^']/escapedQuote)* { return a.join('').replace(/('')/g, "'"); }
 escapedQuote                = a:"''" { return a; }
 identifierPart              = a:[_a-zA-Z] b:unreserved? { return a + b; }
@@ -273,12 +273,12 @@ filter                      =   "$filter=" list:filterExpr {
                                 }
                             /   "$filter=" .* { return {"error": 'invalid $filter parameter'}; }
 
-filterExpr                  = 
+filterExpr                  =
                               left:("(" WSP? filter:filterExpr WSP? ")"{return filter}) right:( WSP type:("and"/"or") WSP value:filterExpr{
                                     return { type: type, value: value}
                               })? {
                                 return filterExprHelper(left, right);
-                              } / 
+                              } /
                               left:cond right:( WSP type:("and"/"or") WSP value:filterExpr{
                                     return { type: type, value: value}
                               })? {
